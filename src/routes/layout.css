@@ -1,1 +1,55 @@
 @import 'tailwindcss';
+
+@font-face {
+	font-family: 'Rubik';
+	font-style: normal;
+	src: url('/fonts/Rubik/Rubik-VariableFont_wght.ttf') format('woff-variations');
+}
+
+@font-face {
+	font-family: 'Montserrat';
+	font-style: normal;
+	src: url('/fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('woff-variations');
+}
+
+@layer base {
+	*,
+	*::before,
+	*::after {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		scroll-behavior: smooth;
+	}
+}
+
+body {
+	overflow-x: hidden;
+	width: 100vw;
+	height: 100vh;
+}
+
+@utility no-scrollbar {
+	@apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: 'Montserrat';
+}
+
+h1 {
+	font-size: clamp(3.5rem, 10vw, 7rem);
+}
+
+h2 {
+	font-size: clamp(2.5rem, 8vw, 5rem);
+}
+
+h3 {
+	font-size: clamp(1.5rem, 6vw, 3rem);
+}
