@@ -1,5 +1,42 @@
 @import 'tailwindcss';
 
+@plugin 'daisyui';
+
+@plugin 'daisyui/theme' {
+	name: 'rose-pine-dark';
+	default: true;
+	prefersdark: true;
+	color-scheme: 'dark';
+	--color-base-100: #1f1d2e;
+	--color-base-200: #282637;
+	--color-base-300: #312e3f;
+	--color-base-content: oklch(96% 0.003 264.542);
+	--color-primary: #c4a7e7;
+	--color-primary-content: oklch(25% 0.09 281.288);
+	--color-secondary: #ebbcba;
+	--color-secondary-content: oklch(31% 0.016 285.938);
+	--color-accent: #f6c177;
+	--color-accent-content: oklch(25% 0.092 26.042);
+	--color-neutral: #191724;
+	--color-neutral-content: oklch(98% 0.002 247.839);
+	--color-info: #31748f;
+	--color-info-content: oklch(97% 0.014 254.604);
+	--color-success: #9ccfd8;
+	--color-success-content: oklch(31% 0.031 120.757);
+	--color-warning: #f6c177;
+	--color-warning-content: oklch(31.5% 0.026 102.212);
+	--color-error: #eb6f92;
+	--color-error-content: oklch(28.6% 0.015 12.422);
+	--radius-selector: 2rem;
+	--radius-field: 2rem;
+	--radius-box: 2rem;
+	--size-selector: 0.25rem;
+	--size-field: 0.25rem;
+	--border: 1px;
+	--depth: 0;
+	--noise: 0;
+}
+
 @font-face {
 	font-family: 'Rubik';
 	font-style: normal;
@@ -27,6 +64,7 @@ body {
 	overflow-x: hidden;
 	width: 100vw;
 	height: 100vh;
+	background-color: var(--color-base-300);
 }
 
 @utility no-scrollbar {

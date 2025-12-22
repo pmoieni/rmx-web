@@ -1,8 +1,12 @@
-import axios, { Axios } from 'axios';
+import axios, { Axios, AxiosError } from 'axios';
 
-interface CreateJam {
+interface CreateJamReq {
 	name: string;
 	bpm: number;
+}
+
+interface CreateJamRes {
+	id: string;
 }
 
 export class JamAPI {
@@ -14,7 +18,18 @@ export class JamAPI {
 		});
 	}
 
-	createJam(data: CreateJam) {
-		this.instance.post(JSON.stringify(data));
+	async createJam(data: CreateJamReq): Promise<Result> {
+		try {
+			const res = await this.instance.post(JSON.stringify(data));
+		} catch (err) {
+			const error = err as AxiosError;
+			if (axios.isAxiosError(error)) {
+				console.log(error);
+			} else {
+				console.log(err);
+			}
+		}
 	}
+
+	connectWS(data: CreateJamReq) {}
 }
