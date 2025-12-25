@@ -1,75 +1,37 @@
 import axios from 'axios';
 import {
-	InstrumentClass,
 	instrumentClassToString,
-	NoteClass,
-	noteClassToString,
-	noteClassToStringSolfege,
-	NotesList,
-	Soundfont,
-	soundfontToString
+	NoteName,
+	soundfontToString,
+	type InstrumentClass,
+	type SoundfontClass
 } from './consts';
-
-export class Note {
-	name: string;
-	class: NoteClass;
-	instrument: Instrument;
-	audioElement?: HTMLAudioElement;
-
-	constructor(name: string, noteClass: NoteClass, inst: Instrument) {
-		this.name = name;
-		this.class = noteClass;
-		this.instrument = inst;
-
-		if (!inst.db) return;
-
-		const req = inst.db
-			.transaction(inst.objectStoreKey)
-			.objectStore(inst.objectStoreKey)
-			.get([name]);
-		req.onsuccess = () => {
-			console.log('get');
-			console.log(req.result);
-		};
-	}
-
-	play() {
-		this.audioElement?.play();
-	}
-
-	revoke() {}
-
-	toString(): string {
-		return noteClassToString(this.class);
-	}
-
-	toStringSolfege(): string {
-		return noteClassToStringSolfege(this.class);
-	}
-}
+import { SvelteMap } from 'svelte/reactivity';
+import { Note } from './note';
 
 interface SoundfontBlob {
-	note: string;
+	note: NoteName;
 	blob: string;
 }
 
-export class Instrument {
+export class Soundfont {
 	loaded = $state(false);
+	notes: Map<NoteName, Note> = new SvelteMap();
 
-	db?: IDBDatabase;
-	objectStoreKey: string;
-	private class: InstrumentClass;
-	private soundfont: Soundfont;
+	private db?: IDBDatabase;
+	private objectStoreKey: string;
+	private instrumentClass: InstrumentClass;
+	private soundfontClass: SoundfontClass;
 
-	constructor(instrument: InstrumentClass, soundfont: Soundfont) {
-		this.class = instrument;
-		this.soundfont = soundfont;
+	constructor(instrumentClass: InstrumentClass, soundfontClass: SoundfontClass) {
+		this.instrumentClass = instrumentClass;
+		this.soundfontClass = soundfontClass;
 		this.objectStoreKey =
 			'instrument' +
 			'-' +
-			instrumentClassToString(this.class) +
+			instrumentClassToString(this.instrumentClass) +
 			'-' +
-			soundfontToString(this.soundfont);
+			soundfontToString(this.soundfontClass);
 
 		const req = window.indexedDB.open('mutil', 1);
 
@@ -96,7 +58,7 @@ export class Instrument {
 				keyPath: 'id',
 				autoIncrement: true
 			});
-			objectStore.createIndex('note-idx', ['note'], { unique: true, multiEntry: false });
+			objectStore.createIndex('note-idx', 'note', { unique: true, multiEntry: false });
 		};
 	}
 
@@ -107,17 +69,20 @@ export class Instrument {
 		try {
 			const blobs: SoundfontBlob[] = [];
 
-			for (const note of NotesList) {
+			for (const note in NoteName) {
 				const req = await axios.get(`http://localhost:5173/instrument/piano/fluid/${note}.mp3`, {
 					responseType: 'blob'
 				});
 
 				const item: SoundfontBlob = {
-					note: note,
+					note: <NoteName>note, // enums are just strings
 					blob: req.data
 				};
 
 				blobs.push(item);
+
+				const newNote = new Note(<NoteName>note, req.data);
+				this.notes.set(<NoteName>note, newNote);
 			}
 
 			const transaction = this.db.transaction(this.objectStoreKey, 'readwrite');
@@ -135,6 +100,10 @@ export class Instrument {
 		}
 	}
 
+	play(name: NoteName) {
+		this.notes.get(name)?.play();
+	}
+
 	private save(objectStore: IDBObjectStore, puts: SoundfontBlob[], callback: () => void) {
 		let pendingRequests = 0;
 		function dispatchRequest() {
@@ -149,15 +118,5 @@ export class Instrument {
 			}
 		}
 		dispatchRequest();
-	}
-
-	async load() {
-		try {
-			const notes: Note[] = [];
-
-			return notes;
-		} catch (err) {
-			console.log(err);
-		}
 	}
 }

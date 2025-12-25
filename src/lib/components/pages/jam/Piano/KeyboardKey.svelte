@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type Note } from '$lib/mutil/index.svelte';
+	import type { Note } from '$lib/mutil/note';
 	import { Button } from 'bits-ui';
 
 	interface Props {

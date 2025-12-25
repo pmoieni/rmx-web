@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Note } from '$lib/mutil/index.svelte';
+	import type { Note } from '$lib/mutil/note';
 	import KeyboardRow from './KeyboardRow.svelte';
 
 	interface Props {
