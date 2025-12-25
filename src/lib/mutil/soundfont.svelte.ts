@@ -19,6 +19,7 @@ export class Soundfont {
 	notes: Map<NoteName, Note> = new SvelteMap();
 
 	private db?: IDBDatabase;
+	private exists = true; // whether the soundfonts are already fetched and cached in indexed DB
 	private objectStoreKey: string;
 	private instrumentClass: InstrumentClass;
 	private soundfontClass: SoundfontClass;
@@ -48,11 +49,13 @@ export class Soundfont {
 		};
 
 		req.onupgradeneeded = () => {
+			this.exists = false;
 			const db = req.result;
 
 			// object store already exits
-			if (db.objectStoreNames.contains(this.objectStoreKey))
+			if (db.objectStoreNames.contains(this.objectStoreKey)) {
 				db.deleteObjectStore(this.objectStoreKey);
+			}
 
 			const objectStore = db.createObjectStore(this.objectStoreKey, {
 				keyPath: 'id',
@@ -69,26 +72,52 @@ export class Soundfont {
 		try {
 			const blobs: SoundfontBlob[] = [];
 
-			for (const note in NoteName) {
-				const req = await axios.get(`http://localhost:5173/instrument/piano/fluid/${note}.mp3`, {
-					responseType: 'blob'
-				});
+			if (this.exists) {
+				const transaction = this.db.transaction(this.objectStoreKey, 'readonly');
+				const objectStore = transaction.objectStore(this.objectStoreKey);
 
-				const item: SoundfontBlob = {
-					note: <NoteName>note, // enums are just strings
-					blob: req.data
-				};
+				const noteIdx = objectStore.index('note-idx');
 
-				blobs.push(item);
+				for (const note in NoteName) {
+					const req = noteIdx.get(<NoteName>note);
 
-				const newNote = new Note(<NoteName>note, req.data);
-				this.notes.set(<NoteName>note, newNote);
+					req.onerror = (event) => {
+						console.log(event);
+					};
+
+					req.onsuccess = () => {
+						if (req.result && req.result.blob) {
+							const newNote = new Note(<NoteName>note, req.result.blob);
+							this.notes.set(<NoteName>note, newNote);
+						}
+					};
+				}
+			} else {
+				for (const note in NoteName) {
+					const req = await axios.get(`http://localhost:5173/instrument/piano/fluid/${note}.mp3`, {
+						responseType: 'blob'
+					});
+
+					const item: SoundfontBlob = {
+						note: <NoteName>note, // enums are just strings
+						blob: req.data
+					};
+
+					blobs.push(item);
+
+					const newNote = new Note(<NoteName>note, req.data);
+					this.notes.set(<NoteName>note, newNote);
+				}
 			}
 
 			const transaction = this.db.transaction(this.objectStoreKey, 'readwrite');
 			const objectStore = transaction.objectStore(this.objectStoreKey);
 
 			transaction.onerror = (event) => {
+				console.log(event);
+			};
+
+			transaction.onabort = (event) => {
 				console.log(event);
 			};
 
@@ -99,6 +128,8 @@ export class Soundfont {
 			}
 		}
 	}
+
+	load() {}
 
 	play(name: NoteName) {
 		this.notes.get(name)?.play();
