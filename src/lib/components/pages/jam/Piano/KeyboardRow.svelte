@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Note } from '$lib/mutil/note';
-	import KeyboardKey from './KeyboardKey.svelte';
+	import type { Note } from "$lib/mutil/note";
+	import KeyboardKey from "./KeyboardKey.svelte";
 
 	interface Props {
 		row: Note[];

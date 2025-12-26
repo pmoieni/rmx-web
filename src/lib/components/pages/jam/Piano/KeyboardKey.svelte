@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Note } from '$lib/mutil/note';
-	import { Button } from 'bits-ui';
+	import type { Note } from "$lib/mutil/note";
+	import { Button } from "bits-ui";
 
 	interface Props {
 		note: Note;

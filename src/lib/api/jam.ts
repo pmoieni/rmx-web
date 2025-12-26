@@ -1,4 +1,4 @@
-import axios, { Axios, AxiosError } from 'axios';
+import axios, { Axios, AxiosError } from "axios";
 
 interface CreateJamReq {
 	name: string;
@@ -14,7 +14,7 @@ export class JamAPI {
 
 	constructor() {
 		this.instance = axios.create({
-			baseURL: 'http://localhost:1234/jam/'
+			baseURL: "http://localhost:1234/jam/",
 		});
 	}
 

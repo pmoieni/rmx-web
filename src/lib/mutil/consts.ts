@@ -1,103 +1,103 @@
 export enum InstrumentClass {
-	AcousticPiano
+	AcousticPiano,
 }
 
 export function instrumentClassToString(instClass: InstrumentClass): string {
 	switch (instClass) {
 		case InstrumentClass.AcousticPiano:
-			return 'acoustic_piano';
+			return "acoustic_piano";
 	}
 }
 
 export enum NoteName {
-	A0 = 'A0',
-	A1 = 'A1',
-	A2 = 'A2',
-	A3 = 'A3',
-	A4 = 'A4',
-	A5 = 'A5',
-	A6 = 'A6',
-	A7 = 'A7',
-	AS0 = 'AS0',
-	AS1 = 'AS1',
-	AS2 = 'AS2',
-	AS3 = 'AS3',
-	AS4 = 'AS4',
-	AS5 = 'AS5',
-	AS6 = 'AS6',
-	AS7 = 'AS7',
-	B0 = 'B0',
-	B1 = 'B1',
-	B2 = 'B2',
-	B3 = 'B3',
-	B4 = 'B4',
-	B5 = 'B5',
-	B6 = 'B6',
-	B7 = 'B7',
-	C1 = 'C1',
-	C2 = 'C2',
-	C3 = 'C3',
-	C4 = 'C4',
-	C5 = 'C5',
-	C6 = 'C6',
-	C7 = 'C7',
-	C8 = 'C8',
-	CS1 = 'CS1',
-	CS2 = 'CS2',
-	CS3 = 'CS3',
-	CS4 = 'CS4',
-	CS5 = 'CS5',
-	CS6 = 'CS6',
-	CS7 = 'CS7',
-	D1 = 'D1',
-	D2 = 'D2',
-	D3 = 'D3',
-	D4 = 'D4',
-	D5 = 'D5',
-	D6 = 'D6',
-	D7 = 'D7',
-	DS1 = 'DS1',
-	DS2 = 'DS2',
-	DS3 = 'DS3',
-	DS4 = 'DS4',
-	DS5 = 'DS5',
-	DS6 = 'DS6',
-	DS7 = 'DS7',
-	E1 = 'E1',
-	E2 = 'E2',
-	E3 = 'E3',
-	E4 = 'E4',
-	E5 = 'E5',
-	E6 = 'E6',
-	E7 = 'E7',
-	F1 = 'F1',
-	F2 = 'F2',
-	F3 = 'F3',
-	F4 = 'F4',
-	F5 = 'F5',
-	F6 = 'F6',
-	F7 = 'F7',
-	FS1 = 'FS1',
-	FS2 = 'FS2',
-	FS3 = 'FS3',
-	FS4 = 'FS4',
-	FS5 = 'FS5',
-	FS6 = 'FS6',
-	FS7 = 'FS7',
-	G1 = 'G1',
-	G2 = 'G2',
-	G3 = 'G3',
-	G4 = 'G4',
-	G5 = 'G5',
-	G6 = 'G6',
-	G7 = 'G7',
-	GS1 = 'GS1',
-	GS2 = 'GS2',
-	GS3 = 'GS3',
-	GS4 = 'GS4',
-	GS5 = 'GS5',
-	GS6 = 'GS6',
-	GS7 = 'GS7'
+	A0 = "A0",
+	A1 = "A1",
+	A2 = "A2",
+	A3 = "A3",
+	A4 = "A4",
+	A5 = "A5",
+	A6 = "A6",
+	A7 = "A7",
+	AS0 = "AS0",
+	AS1 = "AS1",
+	AS2 = "AS2",
+	AS3 = "AS3",
+	AS4 = "AS4",
+	AS5 = "AS5",
+	AS6 = "AS6",
+	AS7 = "AS7",
+	B0 = "B0",
+	B1 = "B1",
+	B2 = "B2",
+	B3 = "B3",
+	B4 = "B4",
+	B5 = "B5",
+	B6 = "B6",
+	B7 = "B7",
+	C1 = "C1",
+	C2 = "C2",
+	C3 = "C3",
+	C4 = "C4",
+	C5 = "C5",
+	C6 = "C6",
+	C7 = "C7",
+	C8 = "C8",
+	CS1 = "CS1",
+	CS2 = "CS2",
+	CS3 = "CS3",
+	CS4 = "CS4",
+	CS5 = "CS5",
+	CS6 = "CS6",
+	CS7 = "CS7",
+	D1 = "D1",
+	D2 = "D2",
+	D3 = "D3",
+	D4 = "D4",
+	D5 = "D5",
+	D6 = "D6",
+	D7 = "D7",
+	DS1 = "DS1",
+	DS2 = "DS2",
+	DS3 = "DS3",
+	DS4 = "DS4",
+	DS5 = "DS5",
+	DS6 = "DS6",
+	DS7 = "DS7",
+	E1 = "E1",
+	E2 = "E2",
+	E3 = "E3",
+	E4 = "E4",
+	E5 = "E5",
+	E6 = "E6",
+	E7 = "E7",
+	F1 = "F1",
+	F2 = "F2",
+	F3 = "F3",
+	F4 = "F4",
+	F5 = "F5",
+	F6 = "F6",
+	F7 = "F7",
+	FS1 = "FS1",
+	FS2 = "FS2",
+	FS3 = "FS3",
+	FS4 = "FS4",
+	FS5 = "FS5",
+	FS6 = "FS6",
+	FS7 = "FS7",
+	G1 = "G1",
+	G2 = "G2",
+	G3 = "G3",
+	G4 = "G4",
+	G5 = "G5",
+	G6 = "G6",
+	G7 = "G7",
+	GS1 = "GS1",
+	GS2 = "GS2",
+	GS3 = "GS3",
+	GS4 = "GS4",
+	GS5 = "GS5",
+	GS6 = "GS6",
+	GS7 = "GS7",
 }
 
 export type NoteANatural =
@@ -221,7 +221,7 @@ export type NoteClass =
 export function noteClassToString(note: NoteName): string {
 	const noteClass = note.slice(0, -1);
 	if (noteClass.length === 2) {
-		return noteClass.substring(0, 1) + '#';
+		return noteClass.substring(0, 1) + "#";
 	}
 
 	return noteClass;
@@ -232,43 +232,43 @@ export function noteClassToStringSolfege(note: NoteName): string {
 	let noteName = noteClass.substring(0, 1);
 
 	switch (noteName) {
-		case 'A':
-			noteName = 'La';
+		case "A":
+			noteName = "La";
 			break;
-		case 'B':
-			noteName = 'Ti';
+		case "B":
+			noteName = "Ti";
 			break;
-		case 'C':
-			noteName = 'Do';
+		case "C":
+			noteName = "Do";
 			break;
-		case 'D':
-			noteName = 'Re';
+		case "D":
+			noteName = "Re";
 			break;
-		case 'E':
-			noteName = 'Mi';
+		case "E":
+			noteName = "Mi";
 			break;
-		case 'F':
-			noteName = 'Fa';
+		case "F":
+			noteName = "Fa";
 			break;
-		case 'G':
-			noteName = 'Sol';
+		case "G":
+			noteName = "Sol";
 			break;
 	}
 
 	if (noteClass.length === 2) {
-		return noteName + '#';
+		return noteName + "#";
 	}
 
 	return noteName;
 }
 
 export enum SoundfontClass {
-	Fluid
+	Fluid,
 }
 
 export function soundfontToString(soundfontClass: SoundfontClass): string {
 	switch (soundfontClass) {
 		case SoundfontClass.Fluid:
-			return 'fluid';
+			return "fluid";
 	}
 }

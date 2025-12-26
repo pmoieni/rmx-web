@@ -1,13 +1,13 @@
-import axios from 'axios';
+import axios from "axios";
 import {
 	instrumentClassToString,
 	NoteName,
 	soundfontToString,
 	type InstrumentClass,
-	type SoundfontClass
-} from './consts';
-import { SvelteMap } from 'svelte/reactivity';
-import { Note } from './note';
+	type SoundfontClass,
+} from "./consts";
+import { SvelteMap } from "svelte/reactivity";
+import { Note } from "./note";
 
 interface SoundfontBlob {
 	note: NoteName;
@@ -24,17 +24,20 @@ export class Soundfont {
 	private instrumentClass: InstrumentClass;
 	private soundfontClass: SoundfontClass;
 
-	constructor(instrumentClass: InstrumentClass, soundfontClass: SoundfontClass) {
+	constructor(
+		instrumentClass: InstrumentClass,
+		soundfontClass: SoundfontClass,
+	) {
 		this.instrumentClass = instrumentClass;
 		this.soundfontClass = soundfontClass;
 		this.objectStoreKey =
-			'instrument' +
-			'-' +
+			"instrument" +
+			"-" +
 			instrumentClassToString(this.instrumentClass) +
-			'-' +
+			"-" +
 			soundfontToString(this.soundfontClass);
 
-		const req = window.indexedDB.open('mutil', 1);
+		const req = window.indexedDB.open("mutil", 1);
 
 		req.onerror = () => {
 			console.log(req.error);
@@ -58,10 +61,13 @@ export class Soundfont {
 			}
 
 			const objectStore = db.createObjectStore(this.objectStoreKey, {
-				keyPath: 'id',
-				autoIncrement: true
+				keyPath: "id",
+				autoIncrement: true,
 			});
-			objectStore.createIndex('note-idx', 'note', { unique: true, multiEntry: false });
+			objectStore.createIndex("note-idx", "note", {
+				unique: true,
+				multiEntry: false,
+			});
 		};
 	}
 
@@ -73,10 +79,15 @@ export class Soundfont {
 			const blobs: SoundfontBlob[] = [];
 
 			if (this.exists) {
-				const transaction = this.db.transaction(this.objectStoreKey, 'readonly');
-				const objectStore = transaction.objectStore(this.objectStoreKey);
+				const transaction = this.db.transaction(
+					this.objectStoreKey,
+					"readonly",
+				);
+				const objectStore = transaction.objectStore(
+					this.objectStoreKey,
+				);
 
-				const noteIdx = objectStore.index('note-idx');
+				const noteIdx = objectStore.index("note-idx");
 
 				for (const note in NoteName) {
 					const req = noteIdx.get(<NoteName>note);
@@ -87,20 +98,26 @@ export class Soundfont {
 
 					req.onsuccess = () => {
 						if (req.result && req.result.blob) {
-							const newNote = new Note(<NoteName>note, req.result.blob);
+							const newNote = new Note(
+								<NoteName>note,
+								req.result.blob,
+							);
 							this.notes.set(<NoteName>note, newNote);
 						}
 					};
 				}
 			} else {
 				for (const note in NoteName) {
-					const req = await axios.get(`http://localhost:5173/instrument/piano/fluid/${note}.mp3`, {
-						responseType: 'blob'
-					});
+					const req = await axios.get(
+						`http://localhost:5173/instrument/piano/fluid/${note}.mp3`,
+						{
+							responseType: "blob",
+						},
+					);
 
 					const item: SoundfontBlob = {
 						note: <NoteName>note, // enums are just strings
-						blob: req.data
+						blob: req.data,
 					};
 
 					blobs.push(item);
@@ -110,7 +127,10 @@ export class Soundfont {
 				}
 			}
 
-			const transaction = this.db.transaction(this.objectStoreKey, 'readwrite');
+			const transaction = this.db.transaction(
+				this.objectStoreKey,
+				"readwrite",
+			);
 			const objectStore = transaction.objectStore(this.objectStoreKey);
 
 			transaction.onerror = (event) => {
@@ -135,7 +155,11 @@ export class Soundfont {
 		this.notes.get(name)?.play();
 	}
 
-	private save(objectStore: IDBObjectStore, puts: SoundfontBlob[], callback: () => void) {
+	private save(
+		objectStore: IDBObjectStore,
+		puts: SoundfontBlob[],
+		callback: () => void,
+	) {
 		let pendingRequests = 0;
 		function dispatchRequest() {
 			while (pendingRequests < 100 && puts.length !== 0) {

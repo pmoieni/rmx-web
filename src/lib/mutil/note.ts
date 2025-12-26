@@ -1,4 +1,8 @@
-import { noteClassToString, noteClassToStringSolfege, NoteName } from './consts';
+import {
+	noteClassToString,
+	noteClassToStringSolfege,
+	NoteName,
+} from "./consts";
 
 export class Note {
 	name: NoteName;

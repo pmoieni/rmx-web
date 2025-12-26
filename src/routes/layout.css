@@ -1,12 +1,12 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-@plugin 'daisyui';
+@plugin "daisyui";
 
-@plugin 'daisyui/theme' {
-	name: 'rose-pine-dark';
+@plugin "daisyui/theme" {
+	name: "rose-pine-dark";
 	default: true;
 	prefersdark: true;
-	color-scheme: 'dark';
+	color-scheme: "dark";
 	--color-base-100: #1f1d2e;
 	--color-base-200: #282637;
 	--color-base-300: #312e3f;
@@ -38,15 +38,17 @@
 }
 
 @font-face {
-	font-family: 'Rubik';
+	font-family: "Rubik";
 	font-style: normal;
-	src: url('/fonts/Rubik/Rubik-VariableFont_wght.ttf') format('woff-variations');
+	src: url("/fonts/Rubik/Rubik-VariableFont_wght.ttf")
+		format("woff-variations");
 }
 
 @font-face {
-	font-family: 'Montserrat';
+	font-family: "Montserrat";
 	font-style: normal;
-	src: url('/fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('woff-variations');
+	src: url("/fonts/Montserrat/Montserrat-VariableFont_wght.ttf")
+		format("woff-variations");
 }
 
 @layer base {
@@ -77,7 +79,7 @@ h3,
 h4,
 h5,
 h6 {
-	font-family: 'Montserrat';
+	font-family: "Montserrat";
 }
 
 h1 {
