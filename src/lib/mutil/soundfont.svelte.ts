@@ -2,6 +2,7 @@ import axios from "axios";
 import {
 	instrumentClassToString,
 	NoteName,
+	notesOrdered,
 	soundfontToString,
 	type InstrumentClass,
 	type SoundfontClass,
@@ -11,6 +12,7 @@ import { Note } from "./note";
 
 interface SoundfontBlob {
 	note: NoteName;
+	midi: number;
 	blob: string;
 }
 
@@ -68,6 +70,10 @@ export class Soundfont {
 				unique: true,
 				multiEntry: false,
 			});
+			objectStore.createIndex("midi-idx", "midi", {
+				unique: true,
+				multiEntry: false,
+			});
 		};
 	}
 
@@ -89,8 +95,8 @@ export class Soundfont {
 
 				const noteIdx = objectStore.index("note-idx");
 
-				for (const note in NoteName) {
-					const req = noteIdx.get(<NoteName>note);
+				for (const note of notesOrdered) {
+					const req = noteIdx.get(note);
 
 					req.onerror = (event) => {
 						console.log(event);
@@ -98,16 +104,15 @@ export class Soundfont {
 
 					req.onsuccess = () => {
 						if (req.result && req.result.blob) {
-							const newNote = new Note(
-								<NoteName>note,
-								req.result.blob,
-							);
-							this.notes.set(<NoteName>note, newNote);
+							const newNote = new Note(note, req.result.blob);
+							this.notes.set(note, newNote);
 						}
 					};
 				}
 			} else {
-				for (const note in NoteName) {
+				let midi = 1;
+
+				for (const note of notesOrdered) {
 					const req = await axios.get(
 						`http://localhost:5173/instrument/piano/fluid/${note}.mp3`,
 						{
@@ -116,14 +121,16 @@ export class Soundfont {
 					);
 
 					const item: SoundfontBlob = {
-						note: <NoteName>note, // enums are just strings
+						note: note,
+						midi: midi,
 						blob: req.data,
 					};
 
 					blobs.push(item);
 
-					const newNote = new Note(<NoteName>note, req.data);
-					this.notes.set(<NoteName>note, newNote);
+					const newNote = new Note(note, req.data);
+					this.notes.set(note, newNote);
+					midi++;
 				}
 			}
 
