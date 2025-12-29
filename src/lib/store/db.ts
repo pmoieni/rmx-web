@@ -40,7 +40,6 @@ export class IndexedDB<T> {
 				this.db = req.result;
 				resolve();
 			};
-
 			req.onerror = () => {
 				reject(req.error);
 			};
@@ -61,23 +60,19 @@ export class IndexedDB<T> {
 			transaction.onerror = () => {
 				reject(transaction.error);
 			};
-
 			transaction.onabort = () => {
 				reject();
 			};
-
 			transaction.oncomplete = () => {
 				resolve(results);
 			};
 
 			const objectStore = transaction.objectStore(this.objectStoreName);
-
 			const req = objectStore.getAll();
 
 			req.onerror = () => {
 				reject(req.error);
 			};
-
 			req.onsuccess = () => {
 				results = req.result;
 			};
@@ -139,7 +134,6 @@ export class IndexedDB<T> {
 		transaction.onerror = (event) => {
 			console.log(event);
 		};
-
 		transaction.onabort = (event) => {
 			console.log(event);
 		};
@@ -174,7 +168,6 @@ export class IndexedDB<T> {
 					this.objectStoreName,
 					"readonly",
 				);
-
 				const objectStore = transaction.objectStore(
 					this.objectStoreName,
 				);
@@ -182,7 +175,6 @@ export class IndexedDB<T> {
 				transaction.onerror = () => {
 					reject(transaction.error);
 				};
-
 				transaction.onabort = () => {
 					reject();
 				};
@@ -192,7 +184,6 @@ export class IndexedDB<T> {
 				req.onerror = () => {
 					reject(req.error);
 				};
-
 				req.onsuccess = () => {
 					resolve(req.result);
 				};
