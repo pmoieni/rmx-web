@@ -13,15 +13,14 @@ import { IndexedDB } from "$lib/store/db";
 interface SoundfontBlob {
 	note: NoteName;
 	midi: number;
-	blob: string;
+	blob: Blob;
 }
 
 export class Soundfont {
 	notes: Map<NoteName, Note> = new Map();
-	private exists = true; // whether the soundfonts are already fetched and cached in indexed DB
-	private db: IndexedDB;
+	private db: IndexedDB<SoundfontBlob>;
 
-	private constructor(db: IndexedDB) {
+	private constructor(db: IndexedDB<SoundfontBlob>) {
 		this.db = db;
 	}
 
@@ -36,28 +35,30 @@ export class Soundfont {
 			"-" +
 			soundfontToString(soundfontClass);
 
-		const db = new IndexedDB(objectStoreKey, 1, ["note", "midi"]);
+		const db = new IndexedDB<SoundfontBlob>(objectStoreKey, 1, [
+			"note",
+			"midi",
+		]);
 		await db.connect();
 
-		return new Soundfont(db);
+		const soundfont = new Soundfont(db);
+		await soundfont.load();
+
+		return soundfont;
 	}
 
 	async load() {
-		// TODO: handle error
-		if (!this.db) {
-			console.log("db undefined");
-			return;
-		}
-
 		const blobs: SoundfontBlob[] = [];
 
-		if (this.exists) {
-			const dbNotesReq = this.db.getByKey("note", notesOrdered);
+		const count = await this.db.count();
 
-			for (const req of dbNotesReq) {
-				if (req.result && req.result.blob && req.result.note) {
-					const newNote = new Note(req.result.note, req.result.blob);
-					this.notes.set(req.result.note, newNote);
+		if (this.db.exists() && count > 0) {
+			const dbResults = await this.db.getAll();
+
+			for (const res of dbResults) {
+				if (res.blob && res.note) {
+					const newNote = new Note(res.note, res.blob);
+					this.notes.set(res.note, newNote);
 				}
 			}
 		} else {
