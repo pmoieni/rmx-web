@@ -3,6 +3,9 @@
 	import Keyboard from "./Keyboard.svelte";
 	import Piano from "./Piano.svelte";
 	import { Instrument } from "$lib/mutil/instrument";
+	import { Note } from "$lib/mutil/note";
+	import { onMount } from "svelte";
+	import { Soundfont } from "$lib/mutil/soundfont";
 
 	interface Props {
 		type: "piano" | "keyboard";
@@ -10,15 +13,17 @@
 
 	let { type = $bindable("keyboard") }: Props = $props();
 
-	const instrument = new Instrument(
-		InstrumentClass.AcousticPiano,
-		SoundfontClass.Fluid,
-	);
+	let instrument = $state<Instrument>();
+	let octaves = $state<Note[][]>([]);
 
-	$effect(() => {
-		if (instrument.loaded) {
-			instrument.fetch();
-		}
+	onMount(async () => {
+		const acousticPiano = await Soundfont.init(
+			InstrumentClass.AcousticPiano,
+			SoundfontClass.Fluid,
+		);
+
+		instrument = new Instrument(acousticPiano);
+		octaves = instrument.chunkNotesInto([3, 12, 12, 12, 12, 12, 12, 12, 1]);
 	});
 </script>
 
@@ -26,6 +31,6 @@
 	{#if type === "piano"}
 		<Piano />
 	{:else}
-		<Keyboard rows={[[...instrument.notes.values()], []]} />
+		<Keyboard rows={octaves} />
 	{/if}
 </div>

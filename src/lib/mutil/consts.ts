@@ -9,24 +9,6 @@ export function instrumentClassToString(instClass: InstrumentClass): string {
 	}
 }
 
-/*
-	A0 = "A0",
-	AS0 = "AS0",
-	B0 = "B0",
-	C1 = "C1",
-	CS1 = "CS1",
-	D1 = "D1",
-	DS1 = "DS1",
-	E1 = "E1",
-	F1 = "F1",
-	FS1 = "FS1",
-	G1 = "G1",
-	GS1 = "GS1",
-	A1 = "A1",
-	AS1 = "AS1",
-	B1 = "B1",
-*/
-
 export enum NoteName {
 	A0 = "A0",
 	A1 = "A1",
