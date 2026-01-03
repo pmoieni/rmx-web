@@ -79,49 +79,6 @@ export class IndexedDB<T> {
 		});
 	}
 
-	/*
-	async getByKey(keyName: string, keys: IDBValidKey[]): Promise<T[]> {
-		return new Promise((resolve, reject) => {
-			if (!this.db) return;
-
-			const transaction = this.db.transaction(
-				this.objectStoreName,
-				"readonly",
-			);
-
-			transaction.onerror = () => {
-				reject(transaction.error);
-			};
-
-			transaction.onabort = () => {
-				reject();
-			};
-
-			const objectStore = transaction.objectStore(this.objectStoreName);
-			const storeIdx = objectStore.index(`${keyName}-idx`);
-
-			const results: T[] = [];
-
-			for (const key of keys) {
-				const req = storeIdx.get(key);
-
-				req.onerror = () => {
-					reject(req.error);
-				};
-
-				req.onsuccess = () => {
-					results.push(req.result);
-				};
-			}
-
-			transaction.oncomplete = () => {
-				console.log("complete");
-				resolve(results);
-			};
-		});
-	}
-    */
-
 	save(puts: T[], callback: () => void) {
 		if (!this.db) return;
 
