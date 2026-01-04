@@ -6,20 +6,20 @@ export const qwertyKeys = [
 	"a",
 	"w",
 	"s",
+	"e",
 	"d",
-	"r",
 	"f",
 	"t",
 	"g",
+	"y",
 	"h",
 	"u",
 	"j",
-	"i",
 	"k",
 	"o",
 	"l",
+	"p",
 	";",
-	"[",
 	"'",
 ];
 
@@ -32,12 +32,12 @@ export class Instrument {
 	private soundfont: Soundfont;
 	private notesArr: Note[];
 
-	private segRange = $state([0, 17]);
+	private segRange = $state([3, 20]); // accounts for 3 notes of first octave
 	currSegment: Note[];
 
 	constructor(soundfont: Soundfont) {
 		this.soundfont = soundfont;
-		this.notesArr = this.soundfont.notes.values().toArray();
+		this.notesArr = this.soundfont.notes.values().toArray().reverse();
 		this.currSegment = $derived(
 			this.notesArr.slice(this.segRange[0], this.segRange[1] + 1),
 		);
